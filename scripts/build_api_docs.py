@@ -12,7 +12,7 @@ import re
 import sys
 from http import HTTPStatus
 from pathlib import Path
-from urllib.parse import unquote
+from urllib.parse import unquote, urlsplit
 
 import yaml
 
@@ -237,7 +237,7 @@ class Operation:
         self.layer = "Admin" if path == "/admin" or path.startswith("/admin/") else "Public"
         self.anchor = f"{self.layer.lower()}-{slug(self.summary)}"
         servers = op.get("servers") or path_item.get("servers") or spec.get("servers") or [{"url": ""}]
-        self.url_path = servers[0]["url"].rstrip("/") + path
+        self.url_path = urlsplit(servers[0]["url"]).path.rstrip("/") + path
         self.security = op.get("security", spec.get("security", []))
         self.request_body = op.get("requestBody")
         self.responses = op.get("responses", {})
@@ -420,12 +420,19 @@ def render_operation(op: Operation) -> str:
 
 def render_overview(spec: dict) -> str:
     info = spec.get("info", {})
-    base = (spec.get("servers") or [{"url": ""}])[0]["url"].rstrip("/")
+    servers = spec.get("servers") or [{"url": ""}]
+    base = urlsplit(servers[0]["url"]).path.rstrip("/")
     out = ['<section id="overview">', f"<h1>{esc(info.get('title', 'API'))}</h1>",
            f'<p class="version">Version {esc(info.get("version", ""))}</p>', prose(info.get("description"))]
     out.append("<h2>Base URL</h2>")
     out.append(f"<p><code>$BASE_URL{esc(base)}</code>. Set <code>BASE_URL</code> to the API host. "
                "The examples below use it as written.</p>")
+    for server in servers:
+        url = urlsplit(server["url"])
+        if url.scheme and url.netloc:
+            name = one_line(server.get("description")).rstrip(".") or url.netloc
+            out.append(f"<h5>{esc(name)}</h5>")
+            out.append(code_block(f"export BASE_URL={url.scheme}://{url.netloc}", copy=True))
     schemes = spec.get("components", {}).get("securitySchemes", {})
     bearer = [s for s in schemes.values() if s.get("type") == "http" and s.get("scheme") == "bearer"]
     if bearer:

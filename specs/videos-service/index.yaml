@@ -16,6 +16,8 @@ info:
 servers:
   - url: /v1
     description: Version 1 of the API.
+  - url: https://videos-api-749098550492.us-central1.run.app/v1
+    description: Production.
 security:
   - bearer_auth: []
 tags:

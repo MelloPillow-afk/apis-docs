@@ -1,0 +1,9 @@
+description: The job was not found.
+content:
+  application/json:
+    schema:
+      $ref: ../index.yaml#/components/schemas/error
+    examples:
+      missing:
+        value:
+          detail: The job was not found.

@@ -1,0 +1,15 @@
+description: The request conflicts with the current video or upload state.
+content:
+  application/json:
+    schema:
+      $ref: ../index.yaml#/components/schemas/error
+    examples:
+      invalid_state:
+        value:
+          detail: The video is not eligible for this operation.
+      stale_attempt:
+        value:
+          detail: This upload attempt is no longer current.
+      not_ready:
+        value:
+          detail: The video is not ready.

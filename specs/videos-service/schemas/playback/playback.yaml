@@ -1,0 +1,27 @@
+x-python-module: playback
+x-python-name: Playback
+type: object
+required:
+  - video_id
+  - playback
+properties:
+  video_id:
+    type: string
+    format: uuid
+  playback:
+    type: object
+    required:
+      - type
+      - url
+    properties:
+      type:
+        type: string
+        const: hls
+      url:
+        $ref: ../shared/delivery_url.yaml
+description: Video ID and HLS playback link.
+examples:
+  - video_id: 550e8400-e29b-41d4-a716-446655440000
+    playback:
+      type: hls
+      url: https://media.example.com/videos/intro/hls/master.m3u8

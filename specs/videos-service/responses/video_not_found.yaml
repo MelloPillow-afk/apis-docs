@@ -1,0 +1,9 @@
+description: The video was not found or is not available to you.
+content:
+  application/json:
+    schema:
+      $ref: ../index.yaml#/components/schemas/error
+    examples:
+      missing:
+        value:
+          detail: The video was not found.

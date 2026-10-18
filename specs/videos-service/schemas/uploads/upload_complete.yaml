@@ -1,0 +1,13 @@
+x-python-module: uploads
+x-python-name: UploadComplete
+type: object
+required:
+  - upload_id
+properties:
+  upload_id:
+    type: string
+    format: uuid
+    description: Upload ID returned with the upload URL.
+description: The upload to confirm.
+examples:
+  - upload_id: 04d1790f-f941-4ba6-8d97-0e6830ca4394

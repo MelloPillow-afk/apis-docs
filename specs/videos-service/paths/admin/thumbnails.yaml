@@ -1,0 +1,124 @@
+/admin/videos/{id}/thumbnails:upload-url:
+  parameters:
+    - $ref: ../../parameters/id.yaml
+  post:
+    tags:
+      - Thumbnails
+    operationId: admin.thumbnails.upload_url
+    summary: Create Video Thumbnail Upload URL
+    description: >-
+      Get a URL and instructions to upload a custom thumbnail. The image must
+      be landscape 16:9 and at least 1280 × 720. A new upload URL replaces any
+      upload not yet confirmed.
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../../schemas/thumbnails/thumbnail_upload_create.yaml
+    responses:
+      '200':
+        description: Thumbnail upload URL and instructions.
+        content:
+          application/json:
+            schema:
+              $ref: ../../schemas/thumbnails/thumbnail_upload.yaml
+      '400':
+        $ref: ../../responses/bad_request.yaml
+      '401':
+        $ref: ../../responses/unauthorized.yaml
+      '403':
+        $ref: ../../responses/forbidden.yaml
+      '404':
+        $ref: ../../responses/video_not_found.yaml
+      '409':
+        $ref: ../../responses/conflict.yaml
+      '413':
+        $ref: ../../responses/file_too_large.yaml
+      '422':
+        $ref: ../../responses/validation_error.yaml
+      '429':
+        $ref: ../../responses/too_many_requests.yaml
+      '500':
+        $ref: ../../responses/internal_error.yaml
+      '503':
+        $ref: ../../responses/unavailable.yaml
+
+/admin/videos/{id}/thumbnails:complete-upload:
+  parameters:
+    - $ref: ../../parameters/id.yaml
+  post:
+    tags:
+      - Thumbnails
+    operationId: admin.thumbnails.complete_upload
+    summary: Confirm Video Thumbnail Upload
+    description: >-
+      Confirm an upload and start rendering it at every thumbnail size; return
+      the job. The current thumbnail stays until the job succeeds. A failed job
+      explains why the image was rejected.
+    requestBody:
+      $ref: ../../index.yaml#/components/requestBodies/upload_completion
+    responses:
+      '202':
+        $ref: ../../responses/job_accepted.yaml
+      '400':
+        $ref: ../../responses/bad_request.yaml
+      '401':
+        $ref: ../../responses/unauthorized.yaml
+      '403':
+        $ref: ../../responses/forbidden.yaml
+      '404':
+        description: The video or uploaded thumbnail was not found.
+        content:
+          application/json:
+            schema:
+              $ref: ../../index.yaml#/components/schemas/error
+      '409':
+        $ref: ../../responses/conflict.yaml
+      '413':
+        $ref: ../../responses/file_too_large.yaml
+      '422':
+        $ref: ../../responses/validation_error.yaml
+      '429':
+        $ref: ../../responses/too_many_requests.yaml
+      '500':
+        $ref: ../../responses/internal_error.yaml
+      '503':
+        $ref: ../../responses/unavailable.yaml
+
+/admin/videos/{id}/thumbnails:
+  parameters:
+    - $ref: ../../parameters/id.yaml
+  delete:
+    tags:
+      - Thumbnails
+    operationId: admin.thumbnails.delete_thumbnail
+    summary: Delete Video Thumbnail
+    description: >-
+      Remove the custom thumbnail, and any upload not yet processed, and use
+      the generated image.
+    responses:
+      '200':
+        description: The generated thumbnail or its current status.
+        content:
+          application/json:
+            schema:
+              $ref: ../../schemas/thumbnails/thumbnail.yaml
+      '400':
+        $ref: ../../responses/bad_request.yaml
+      '401':
+        $ref: ../../responses/unauthorized.yaml
+      '403':
+        $ref: ../../responses/forbidden.yaml
+      '404':
+        $ref: ../../responses/video_not_found.yaml
+      '409':
+        $ref: ../../responses/conflict.yaml
+      '422':
+        $ref: ../../responses/validation_error.yaml
+      '429':
+        $ref: ../../responses/too_many_requests.yaml
+      '500':
+        $ref: ../../responses/internal_error.yaml
+      '503':
+        $ref: ../../responses/unavailable.yaml

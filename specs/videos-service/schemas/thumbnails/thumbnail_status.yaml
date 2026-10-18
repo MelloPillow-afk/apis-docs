@@ -1,0 +1,10 @@
+x-python-module: thumbnails
+x-python-name: ThumbnailStatus
+type: string
+enum:
+  - PENDING
+  - READY
+  - FAILED
+description: Whether the thumbnail is pending, ready, or failed.
+examples:
+  - PENDING

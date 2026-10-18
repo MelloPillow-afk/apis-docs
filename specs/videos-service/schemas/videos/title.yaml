@@ -1,0 +1,9 @@
+x-python-module: videos
+x-python-name: VideoTitle
+type: string
+minLength: 1
+maxLength: 200
+pattern: \S
+description: Video title.
+examples:
+  - Introduction to Faith

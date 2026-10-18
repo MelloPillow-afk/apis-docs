@@ -1,0 +1,27 @@
+x-python-module: thumbnails
+x-python-name: ThumbnailSize
+type: object
+required:
+  - width
+  - height
+  - url
+description: One rendered size of the thumbnail.
+properties:
+  width:
+    type: integer
+    minimum: 1
+    description: Width in pixels.
+  height:
+    type: integer
+    minimum: 1
+    description: Height in pixels.
+  url:
+    type: string
+    format: uri
+    pattern: ^https://
+    description: Image URL.
+examples:
+  - width: 640
+    height: 360
+    url: >-
+      https://media.example.com/videos/550e8400-e29b-41d4-a716-446655440000/thumbnails/50fd0382-794f-4c9b-9a12-60e92a89e008/md.jpg

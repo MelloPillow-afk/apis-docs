@@ -1,0 +1,8 @@
+description: Processing job started or already in progress.
+headers:
+  Location:
+    $ref: ../parameters/job_location.yaml
+content:
+  application/json:
+    schema:
+      $ref: ../schemas/jobs/job.yaml

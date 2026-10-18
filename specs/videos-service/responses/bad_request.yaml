@@ -1,0 +1,9 @@
+description: A deliberate application rejection, such as unsupported media.
+content:
+  application/json:
+    schema:
+      $ref: ../index.yaml#/components/schemas/error
+    examples:
+      unsupported_media:
+        value:
+          detail: The uploaded media is not supported.

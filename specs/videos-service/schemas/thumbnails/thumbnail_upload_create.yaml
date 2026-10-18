@@ -1,0 +1,31 @@
+x-python-module: thumbnails
+x-python-name: ThumbnailUploadCreate
+type: object
+required:
+  - file_name
+  - content_type
+  - size_bytes
+description: Details of the thumbnail image to upload.
+properties:
+  file_name:
+    type: string
+    minLength: 1
+    description: Name of the image file.
+  content_type:
+    type: string
+    enum:
+      - image/jpeg
+      - image/png
+      - image/webp
+    description: Image media type.
+    examples:
+      - image/jpeg
+  size_bytes:
+    type: integer
+    format: int64
+    minimum: 1
+    description: File size in bytes.
+examples:
+  - file_name: faith-cover.jpg
+    content_type: image/jpeg
+    size_bytes: 183420

@@ -1,0 +1,22 @@
+x-python-module: videos
+x-python-name: AdminVideoUpdate
+type: object
+description: Video fields to update.
+anyOf:
+  - required:
+      - title
+  - required:
+      - description
+  - required:
+      - publication_status
+properties:
+  title:
+    $ref: ./title.yaml
+  description:
+    $ref: ./description.yaml
+  publication_status:
+    $ref: ./publication_status.yaml
+examples:
+  - title: Introduction to Faith
+    description: An introductory lesson
+    publication_status: DRAFT

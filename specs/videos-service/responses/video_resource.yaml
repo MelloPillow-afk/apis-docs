@@ -1,0 +1,5 @@
+description: Video details.
+content:
+  application/json:
+    schema:
+      $ref: ../schemas/videos/admin_video.yaml

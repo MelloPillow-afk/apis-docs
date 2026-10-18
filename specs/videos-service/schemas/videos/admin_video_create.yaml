@@ -1,0 +1,14 @@
+x-python-module: videos
+x-python-name: AdminVideoCreate
+type: object
+required:
+  - title
+properties:
+  title:
+    $ref: ./title.yaml
+  description:
+    $ref: ./description.yaml
+description: Title and optional description for a new video.
+examples:
+  - title: Introduction to Faith
+    description: An introductory lesson

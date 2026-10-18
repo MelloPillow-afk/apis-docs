@@ -1,0 +1,6 @@
+description: Address of the new video.
+required: true
+schema:
+  type: string
+  format: uri-reference
+example: /v1/admin/videos/550e8400-e29b-41d4-a716-446655440000

@@ -1,0 +1,12 @@
+x-python-module: videos
+x-python-name: VideoStatus
+type: string
+enum:
+  - CREATED
+  - UPLOADING
+  - PROCESSING
+  - READY
+  - FAILED
+description: Video lifecycle status. Processing progress is on the video's job.
+examples:
+  - CREATED

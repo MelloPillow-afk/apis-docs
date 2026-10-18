@@ -1,0 +1,46 @@
+x-python-module: thumbnails
+x-python-name: Thumbnail
+type: object
+required:
+  - video_id
+  - thumbnail
+properties:
+  video_id:
+    type: string
+    format: uuid
+  thumbnail:
+    $ref: ./thumbnail_image.yaml
+description: Video ID and current thumbnail.
+examples:
+  - video_id: 550e8400-e29b-41d4-a716-446655440000
+    thumbnail:
+      status: READY
+      source: CUSTOM
+      url: >-
+        https://media.example.com/videos/550e8400-e29b-41d4-a716-446655440000/thumbnails/50fd0382-794f-4c9b-9a12-60e92a89e008/xl.jpg
+      sizes:
+        xs:
+          width: 160
+          height: 90
+          url: >-
+            https://media.example.com/videos/550e8400-e29b-41d4-a716-446655440000/thumbnails/50fd0382-794f-4c9b-9a12-60e92a89e008/xs.jpg
+        sm:
+          width: 320
+          height: 180
+          url: >-
+            https://media.example.com/videos/550e8400-e29b-41d4-a716-446655440000/thumbnails/50fd0382-794f-4c9b-9a12-60e92a89e008/sm.jpg
+        md:
+          width: 640
+          height: 360
+          url: >-
+            https://media.example.com/videos/550e8400-e29b-41d4-a716-446655440000/thumbnails/50fd0382-794f-4c9b-9a12-60e92a89e008/md.jpg
+        lg:
+          width: 960
+          height: 540
+          url: >-
+            https://media.example.com/videos/550e8400-e29b-41d4-a716-446655440000/thumbnails/50fd0382-794f-4c9b-9a12-60e92a89e008/lg.jpg
+        xl:
+          width: 1280
+          height: 720
+          url: >-
+            https://media.example.com/videos/550e8400-e29b-41d4-a716-446655440000/thumbnails/50fd0382-794f-4c9b-9a12-60e92a89e008/xl.jpg

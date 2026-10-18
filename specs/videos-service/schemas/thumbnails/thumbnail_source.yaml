@@ -1,0 +1,10 @@
+x-python-module: thumbnails
+x-python-name: ThumbnailSource
+type: string
+enum:
+  - GENERATED
+  - CUSTOM
+  - NONE
+description: Thumbnail source.
+examples:
+  - GENERATED

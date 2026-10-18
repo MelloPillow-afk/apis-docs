@@ -1,0 +1,9 @@
+x-python-module: videos
+x-python-name: PublicationStatus
+type: string
+enum:
+  - DRAFT
+  - PUBLISHED
+description: Whether the video is a draft or published.
+examples:
+  - DRAFT

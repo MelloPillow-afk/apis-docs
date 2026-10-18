@@ -1,0 +1,9 @@
+x-python-module: videos
+x-python-name: VideoDescription
+type:
+  - string
+  - 'null'
+maxLength: 5000
+description: Optional video description.
+examples:
+  - An introductory lesson

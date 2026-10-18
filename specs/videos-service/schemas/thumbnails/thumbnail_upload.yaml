@@ -1,0 +1,22 @@
+x-python-module: thumbnails
+x-python-name: ThumbnailUpload
+type: object
+required:
+  - video_id
+  - upload
+properties:
+  video_id:
+    type: string
+    format: uuid
+  upload:
+    $ref: ../uploads/upload.yaml
+description: Video ID and thumbnail upload instructions.
+examples:
+  - video_id: 550e8400-e29b-41d4-a716-446655440000
+    upload:
+      upload_id: 50fd0382-794f-4c9b-9a12-60e92a89e008
+      method: PUT
+      url: https://uploads.example.com/thumbnail.jpg?signature=example
+      headers:
+        Content-Type: image/jpeg
+      expires_at: '2026-10-13T14:15:00Z'

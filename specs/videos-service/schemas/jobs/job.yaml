@@ -1,0 +1,29 @@
+x-python-module: jobs
+x-python-name: Job
+type: object
+required:
+  - id
+  - status
+  - video_id
+  - message
+description: Background processing job.
+properties:
+  id:
+    type: string
+    format: uuid
+  status:
+    $ref: ./job_status.yaml
+  video_id:
+    type: string
+    format: uuid
+    description: ID of the video this job processes.
+  message:
+    type:
+      - string
+      - 'null'
+    description: Readable explanation of a failed job; null otherwise.
+examples:
+  - id: e9f1c6d0-4e8b-4a23-a52a-21a3d51127d0
+    status: QUEUED
+    video_id: 550e8400-e29b-41d4-a716-446655440000
+    message: null

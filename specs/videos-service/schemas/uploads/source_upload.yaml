@@ -1,0 +1,27 @@
+x-python-module: uploads
+x-python-name: SourceUpload
+type: object
+required:
+  - video_id
+  - status
+  - upload
+properties:
+  video_id:
+    type: string
+    format: uuid
+  status:
+    type: string
+    const: UPLOADING
+  upload:
+    $ref: ./upload.yaml
+description: Video status and upload instructions.
+examples:
+  - video_id: 550e8400-e29b-41d4-a716-446655440000
+    status: UPLOADING
+    upload:
+      upload_id: 04d1790f-f941-4ba6-8d97-0e6830ca4394
+      method: PUT
+      url: https://uploads.example.com/source.mp4?signature=example
+      headers:
+        Content-Type: video/mp4
+      expires_at: '2026-10-13T14:15:00Z'

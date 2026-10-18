@@ -1,0 +1,7 @@
+description: An unexpected server failure. Production responses do not include exception details.
+content:
+  text/plain:
+    schema:
+      type: string
+      examples:
+        - Internal Server Error

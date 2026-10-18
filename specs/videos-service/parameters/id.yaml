@@ -1,0 +1,9 @@
+name: id
+in: path
+required: true
+description: Video ID.
+schema:
+  type: string
+  format: uuid
+  examples:
+    - 550e8400-e29b-41d4-a716-446655440000

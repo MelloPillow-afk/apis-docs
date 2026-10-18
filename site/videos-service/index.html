@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Pilgrims Videos Service API</title><style>
+:root{--bg:#fff;--fg:#1a1a1a;--muted:#666;--line:#e3e3e3;--code-bg:#f5f5f4;--link:#0b57d0}
+@media (prefers-color-scheme:dark){:root{--bg:#141414;--fg:#e8e8e8;--muted:#9a9a9a;--line:#2e2e2e;--code-bg:#1e1e1e;--link:#8ab4f8}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+a{color:var(--link);text-decoration:none}a:hover{text-decoration:underline}
+code,pre,.method{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px}
+.layout{display:flex;min-height:100vh}
+.sidebar{position:sticky;top:0;align-self:flex-start;width:280px;flex:none;height:100vh;overflow-y:auto;padding:24px 16px;border-right:1px solid var(--line)}
+.sidebar a{display:block;padding:3px 6px;color:var(--fg);border-radius:4px}
+.sidebar a:hover{background:var(--code-bg);text-decoration:none}
+.sidebar .home{color:var(--muted);margin-bottom:8px}
+.sidebar ul{list-style:none;margin:0;padding:0}
+.sidebar li a{display:flex}
+.sidebar .method{flex:none;width:52px;padding-top:2px;color:var(--muted);font-size:11px;font-weight:600}
+.sidebar .layer{margin:20px 0 4px;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.sidebar .tag{margin:10px 0 2px 6px;font-size:13px;color:var(--muted)}
+main{flex:1;min-width:0;max-width:880px;padding:32px 40px 96px}
+main.index{margin:0 auto}
+h1{font-size:28px;margin:0 0 4px}
+h2{font-size:22px;margin:48px 0 8px;padding-top:16px;border-top:1px solid var(--line)}
+h2.layer-heading{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+h3{font-size:20px;margin:32px 0 4px}
+h4{font-size:18px;margin:0 0 6px}h4 a{color:var(--fg)}
+h5{font-size:14px;margin:22px 0 8px}
+.endpoint{margin:28px 0;padding-top:24px;border-top:1px solid var(--line);scroll-margin-top:12px}
+.route{margin:0 0 10px}.route .method{font-weight:700;margin-right:6px}
+.version,.note{color:var(--muted)}
+.auth strong{margin-right:6px}
+p code,td code{background:var(--code-bg);padding:1px 5px;border-radius:4px}
+.code{position:relative}
+pre{margin:0 0 12px;padding:14px 16px;background:var(--code-bg);border:1px solid var(--line);border-radius:6px;overflow-x:auto}
+.copy{position:absolute;top:8px;right:8px;font:12px/1 inherit;padding:5px 8px;color:var(--muted);background:var(--bg);border:1px solid var(--line);border-radius:4px;cursor:pointer}
+table{width:100%;border-collapse:collapse;margin:0 0 12px;font-size:14px;display:block;overflow-x:auto}
+th,td{text-align:left;vertical-align:top;padding:7px 10px;border-bottom:1px solid var(--line)}
+th{font-weight:600;color:var(--muted);white-space:nowrap}
+td:first-child{white-space:nowrap}
+.services{padding-left:18px}
+@media (max-width:800px){
+.layout{display:block}
+.sidebar{position:static;width:auto;height:auto;border-right:0;border-bottom:1px solid var(--line)}
+main{padding:24px 16px 64px}
+}
+</style></head><body><div class="layout"><nav class="sidebar"><a class="home" href="../">All APIs</a><a class="overview" href="#overview">Overview</a><p class="layer">Public</p><p class="tag">Health</p><ul><li><a href="#public-get-health"><span class="method">GET</span> Get Health</a></li></ul><p class="tag">Videos</p><ul><li><a href="#public-get-videos-collection"><span class="method">GET</span> Get Videos Collection</a></li></ul><p class="tag">Playback</p><ul><li><a href="#public-get-video-playback"><span class="method">GET</span> Get Video Playback</a></li></ul><p class="tag">Jobs</p><ul><li><a href="#public-get-job"><span class="method">GET</span> Get Job</a></li></ul><p class="layer">Admin</p><p class="tag">Videos</p><ul><li><a href="#admin-list-videos"><span class="method">GET</span> List Videos</a></li><li><a href="#admin-create-video"><span class="method">POST</span> Create Video</a></li><li><a href="#admin-get-video"><span class="method">GET</span> Get Video</a></li><li><a href="#admin-update-video"><span class="method">PATCH</span> Update Video</a></li><li><a href="#admin-delete-video"><span class="method">DELETE</span> Delete Video</a></li></ul><p class="tag">Uploads</p><ul><li><a href="#admin-create-video-upload-url"><span class="method">POST</span> Create Video Upload URL</a></li><li><a href="#admin-confirm-video-upload"><span class="method">POST</span> Confirm Video Upload</a></li></ul><p class="tag">Thumbnails</p><ul><li><a href="#admin-create-video-thumbnail-upload-url"><span class="method">POST</span> Create Video Thumbnail Upload URL</a></li><li><a href="#admin-confirm-video-thumbnail-upload"><span class="method">POST</span> Confirm Video Thumbnail Upload</a></li><li><a href="#admin-delete-video-thumbnail"><span class="method">DELETE</span> Delete Video Thumbnail</a></li></ul></nav><main><section id="overview"><h1>Pilgrims Videos Service API</h1><p class="version">Version 1.0.0</p><p>Manage videos, upload media, track processing jobs, publish videos, and find playback links. Admin endpoints live under /admin; any authenticated caller has admin access for the MVP. Viewers see ready, published videos. Job status is public at /jobs/{job_id}, so clients can poll processing progress after completing an upload. Viewer access may require authentication, depending on the service settings. JSON fields use snake_case. IDs are UUIDs and timestamps use UTC. Unavailable values are null. Previously shared playback links may remain accessible for a time after a video is unpublished or deleted.</p><h2>Base URL</h2><p><code>$BASE_URL/v1</code>. Set <code>BASE_URL</code> to the API host. The examples below use it as written.</p><h2>Authentication</h2><p>Bearer token for authentication.</p><div class="code"><pre><code>-H &quot;Authorization: Bearer $TOKEN&quot;</code></pre></div><p>Each endpoint states whether it needs the token.</p><h2>Errors</h2><p>A deliberate HTTP error raised by the application.</p><div class="code"><pre><code>{
+  &quot;detail&quot;: &quot;The video was not found.&quot;
+}</code></pre></div><p>Each endpoint lists the error statuses it can return.</p></section><h2 class="layer-heading">Public</h2><h3>Health</h3><p>Check API availability.</p><section class="endpoint" id="public-get-health" data-operation-id="health.ping"><h4><a href="#public-get-health">Get Health</a></h4><p class="route"><span class="method">GET</span> <code>/ping</code></p><p>Check API reachability. Does not check the database.</p><p class="auth"><strong>Auth</strong> None</p><h5>Example request</h5><div class="code"><button class="copy" type="button">Copy</button><pre><code>curl &quot;$BASE_URL/ping&quot;</code></pre></div><h5>Response <code>200 OK</code></h5><p>The API is responding.</p><div class="code"><pre><code>{
+  &quot;status&quot;: &quot;ok&quot;
+}</code></pre></div><h5>Errors</h5><table><thead><tr><th>Status</th><th>Description</th></tr></thead><tbody><tr><td><code>500</code></td><td>An unexpected server failure. Production responses do not include exception details.</td></tr></tbody></table></section><h3>Videos</h3><p>Create, update, publish, and delete videos.</p><section class="endpoint" id="public-get-videos-collection" data-operation-id="videos.list_videos"><h4><a href="#public-get-videos-collection">Get Videos Collection</a></h4><p class="route"><span class="method">GET</span> <code>/v1/videos</code></p><p>Browse ready, published videos, newest published first. Pass next_page_token as page_token to get the next page.</p><p class="auth"><strong>Auth</strong> Bearer token, optional</p><h5>Query parameters</h5><table><thead><tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr></thead><tbody><tr><td><code>limit</code></td><td><code>integer</code></td><td>No</td><td>Maximum number of videos to return. <span class="note">1–100. Default 20.</span></td></tr><tr><td><code>page_token</code></td><td><code>string</code></td><td>No</td><td>The next_page_token from the previous page.</td></tr></tbody></table><h5>Example request</h5><div class="code"><button class="copy" type="button">Copy</button><pre><code>curl &quot;$BASE_URL/v1/videos&quot; \
+  -H &quot;Authorization: Bearer $TOKEN&quot;</code></pre></div><h5>Response <code>200 OK</code></h5><p>A page of videos.</p><div class="code"><pre><code>{
+  &quot;data&quot;: [
+    {
+      &quot;id&quot;: &quot;550e8400-e29b-41d4-a716-446655440000&quot;,
+      &quot;title&quot;: &quot;Introduction to Faith&quot;,
+      &quot;description&quot;: &quot;An introductory lesson&quot;,
+      &quot;duration_seconds&quot;: 1475.5,
+      &quot;thumbnail&quot;: {
+        &quot;status&quot;: &quot;READY&quot;,
+        &quot;source&quot;: &quot;CUSTOM&quot;,
+        &quot;url&quot;: &quot;https://media.example.com/videos/550e8400-e29b-41d4-a716-446655440000/thumbnails/50fd0382-794f-4c9b-9a12-60e92a89e008/xl.jpg&quot;,
+        &quot;sizes&quot;: {
+          &quot;xs&quot;: {
+            &quot;width&quot;: 160,
+            &quot;height&quot;: 90,
+            &quot;url&quot;: &quot;https://media.example.com/videos/550e8400-e29b-41d4-a716-446655440000/thumbnails/50fd0382-794f-4c9b-9a12-60e92a89e008/xs.jpg&quot;
+          },
+          &quot;sm&quot;: {
+            &quot;width&quot;: 320,
+            &quot;height&quot;: 180,
+            &quot;url&quot;: &quot;https://media.example.com/videos/550e8400-e29b-41d4-a716-446655440000/thumbnails/50fd0382-794f-4c9b-9a12-60e92a89e008/sm.jpg&quot;
+          },
+          &quot;md&quot;: {
+            &quot;width&quot;: 640,
+            &quot;height&quot;: 360,
+            &quot;url&quot;: &quot;https://media.example.com/videos/550e8400-e29b-41d4-a716-446655440000/thumbnails/50fd0382-794f-4c9b-9a12-60e92a89e008/md.jpg&quot;
+          },
+          &quot;lg&quot;: {
+            &quot;width&quot;: 960,
+            &quot;height&quot;: 540,
+            &quot;url&quot;: &quot;https://media.example.com/videos/550e8400-e29b-41d4-a716-446655440000/thumbnails/50fd0382-794f-4c9b-9a12-60e92a89e008/lg.jpg&quot;
+          },
+          &quot;xl&quot;: {
+            &quot;width&quot;: 1280,
+            &quot;height&quot;: 720,
+            &quot;url&quot;: &quot;https://media.example.com/videos/550e8400-e29b-41d4-a716-446655440000/thumbnails/50fd0382-794f-4c9b-9a12-60e92a89e008/xl.jpg&quot;
+          }
+        }
+      },
+      &quot;published_at&quot;: &quot;2026-10-13T15:00:00Z&quot;
+    }
+  ],
+  &quot;pagination&quot;: {
+    &quot;next_page_token&quot;: null,
+    &quot;has_more&quot;: false
+  }
+}</code></pre></div><h5>Errors</h5><table><thead><tr><th>Status</th><th>Description</th></tr></thead><tbody><tr><td><code>400</code></td><td>The page token is not one this list returned.</td></tr><tr><td><code>401</code></td><td>Authentication is missing or invalid.</td></tr><tr><td><code>403</code></td><td>Access denied.</td></tr><tr><td><code>422</code></td><td>Path, query, or body values failed native request validation.</td></tr><tr><td><code>429</code></td><td>Too many requests. Try again later.</td></tr><tr><td><code>500</code></td><td>An unexpected server failure. Production responses do not include exception details.</td></tr><tr><td><code>503</code></td><td>The service is temporarily unavailable.</td></tr></tbody></table></section><h3>Playback</h3><p>Get video playback links.</p><section class="endpoint" id="public-get-video-playback" data-operation-id="playback.get_playback"><h4><a href="#public-get-video-playback">Get Video Playback</a></h4><p class="route"><span class="method">GET</span> <code>/v1/videos/{id}/playback</code></p><p>Get the HLS playback link for a video.</p><p class="auth"><strong>Auth</strong> Bearer token, optional</p><h5>Path parameters</h5><table><thead><tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr></thead><tbody><tr><td><code>id</code></td><td><code>string (uuid)</code></td><td>Yes</td><td>Video ID.</td></tr></tbody></table><h5>Example request</h5><div class="code"><button class="copy" type="button">Copy</button><pre><code>curl &quot;$BASE_URL/v1/videos/550e8400-e29b-41d4-a716-446655440000/playback&quot; \
+  -H &quot;Authorization: Bearer $TOKEN&quot;</code></pre></div><h5>Response <code>200 OK</code></h5><p>Video playback link.</p><div class="code"><pre><code>{
+  &quot;video_id&quot;: &quot;550e8400-e29b-41d4-a716-446655440000&quot;,
+  &quot;playback&quot;: {
+    &quot;type&quot;: &quot;hls&quot;,
+    &quot;url&quot;: &quot;https://media.example.com/videos/intro/hls/master.m3u8&quot;
+  }
+}</code></pre></div><h5>Errors</h5><table><thead><tr><th>Status</th><th>Description</th></tr></thead><tbody><tr><td><code>400</code></td><td>A deliberate application rejection, such as unsupported media.</td></tr><tr><td><code>401</code></td><td>Authentication is missing or invalid.</td></tr><tr><td><code>403</code></td><td>Access denied.</td></tr><tr><td><code>404</code></td><td>The video was not found or is not available to you.</td></tr><tr><td><code>409</code></td><td>The request conflicts with the current video or upload state.</td></tr><tr><td><code>422</code></td><td>Path, query, or body values failed native request validation.</td></tr><tr><td><code>429</code></td><td>Too many requests. Try again later.</td></tr><tr><td><code>500</code></td><td>An unexpected server failure. Production responses do not include exception details.</td></tr><tr><td><code>503</code></td><td>The service is temporarily unavailable.</td></tr></tbody></table></section><h3>Jobs</h3><p>Check background processing jobs.</p><section class="endpoint" id="public-get-job" data-operation-id="jobs.get_job"><h4><a href="#public-get-job">Get Job</a></h4><p class="route"><span class="method">GET</span> <code>/v1/jobs/{job_id}</code></p><p>Get the status of a background processing job. Clients poll this after completing an upload. Anyone with the job ID can read it.</p><p class="auth"><strong>Auth</strong> None</p><h5>Path parameters</h5><table><thead><tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr></thead><tbody><tr><td><code>job_id</code></td><td><code>string (uuid)</code></td><td>Yes</td><td>Job ID.</td></tr></tbody></table><h5>Example request</h5><div class="code"><button class="copy" type="button">Copy</button><pre><code>curl &quot;$BASE_URL/v1/jobs/e9f1c6d0-4e8b-4a23-a52a-21a3d51127d0&quot;</code></pre></div><h5>Response <code>200 OK</code></h5><p>Job details.</p><div class="code"><pre><code>{
+  &quot;id&quot;: &quot;e9f1c6d0-4e8b-4a23-a52a-21a3d51127d0&quot;,
+  &quot;status&quot;: &quot;QUEUED&quot;,
+  &quot;video_id&quot;: &quot;550e8400-e29b-41d4-a716-446655440000&quot;,
+  &quot;message&quot;: null
+}</code></pre></div><h5>Errors</h5><table><thead><tr><th>Status</th><th>Description</th></tr></thead><tbody><tr><td><code>400</code></td><td>A deliberate application rejection, such as unsupported media.</td></tr><tr><td><code>404</code></td><td>The job was not found.</td></tr><tr><td><code>422</code></td><td>Path, query, or body values failed native request validation.</td></tr><tr><td><code>429</code></td><td>Too many requests. Try again later.</td></tr><tr><td><code>500</code></td><td>An unexpected server failure. Production responses do not include exception details.</td></tr><tr><td><code>503</code></td><td>The service is temporarily unavailable.</td></tr></tbody></table></section><h2 class="layer-heading">Admin</h2><h3>Videos</h3><p>Create, update, publish, and delete videos.</p><section class="endpoint" id="admin-list-videos" data-operation-id="admin.videos.list_videos"><h4><a href="#admin-list-videos">List Videos</a></h4><p class="route"><span class="method">GET</span> <code>/v1/admin/videos</code></p><p>List videos in every lifecycle status, newest created first. Pass next_page_token as page_token, with the same filters, to get the next page.</p><p class="auth"><strong>Auth</strong> Bearer token</p><h5>Query parameters</h5><table><thead><tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr></thead><tbody><tr><td><code>limit</code></td><td><code>integer</code></td><td>No</td><td>Maximum number of videos to return. <span class="note">1–100. Default 20.</span></td></tr><tr><td><code>page_token</code></td><td><code>string</code></td><td>No</td><td>The next_page_token from the previous page.</td></tr><tr><td><code>publication_status</code></td><td><code>DRAFT | PUBLISHED</code></td><td>No</td><td>Filter by publication status.</td></tr></tbody></table><h5>Example request</h5><div class="code"><button class="copy" type="button">Copy</button><pre><code>curl &quot;$BASE_URL/v1/admin/videos&quot; \
+  -H &quot;Authorization: Bearer $TOKEN&quot;</code></pre></div><h5>Response <code>200 OK</code></h5><p>A page of videos.</p><div class="code"><pre><code>{
+  &quot;data&quot;: [
+    {
+      &quot;id&quot;: &quot;550e8400-e29b-41d4-a716-446655440000&quot;,
+      &quot;title&quot;: &quot;Introduction to Faith&quot;,
+      &quot;description&quot;: &quot;An introductory lesson&quot;,
+      &quot;status&quot;: &quot;CREATED&quot;,
+      &quot;publication_status&quot;: &quot;DRAFT&quot;,
+      &quot;size_bytes&quot;: null,
+      &quot;duration_seconds&quot;: null,
+      &quot;thumbnail&quot;: {
+        &quot;status&quot;: &quot;PENDING&quot;,
+        &quot;source&quot;: &quot;NONE&quot;,
+        &quot;url&quot;: null,
+        &quot;sizes&quot;: null
+      },
+      &quot;published_at&quot;: null,
+      &quot;created_at&quot;: &quot;2026-10-13T14:00:00Z&quot;,
+      &quot;updated_at&quot;: &quot;2026-10-13T14:00:00Z&quot;,
+      &quot;latest_job_id&quot;: null
+    }
+  ],
+  &quot;pagination&quot;: {
+    &quot;next_page_token&quot;: null,
+    &quot;has_more&quot;: false
+  }
+}</code></pre></div><h5>Errors</h5><table><thead><tr><th>Status</th><th>Description</th></tr></thead><tbody><tr><td><code>400</code></td><td>The page token is not one this list returned.</td></tr><tr><td><code>401</code></td><td>Authentication is missing or invalid.</td></tr><tr><td><code>403</code></td><td>Access denied.</td></tr><tr><td><code>422</code></td><td>Path, query, or body values failed native request validation.</td></tr><tr><td><code>429</code></td><td>Too many requests. Try again later.</td></tr><tr><td><code>500</code></td><td>An unexpected server failure. Production responses do not include exception details.</td></tr><tr><td><code>503</code></td><td>The service is temporarily unavailable.</td></tr></tbody></table></section><section class="endpoint" id="admin-create-video" data-operation-id="admin.videos.create_video"><h4><a href="#admin-create-video">Create Video</a></h4><p class="route"><span class="method">POST</span> <code>/v1/admin/videos</code></p><p>Create a draft with a title and optional description.</p><p class="auth"><strong>Auth</strong> Bearer token</p><h5>Example request</h5><div class="code"><button class="copy" type="button">Copy</button><pre><code>curl -X POST &quot;$BASE_URL/v1/admin/videos&quot; \
+  -H &quot;Authorization: Bearer $TOKEN&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -d &#x27;{
+  &quot;title&quot;: &quot;Introduction to Faith&quot;,
+  &quot;description&quot;: &quot;An introductory lesson&quot;
+}&#x27;</code></pre></div><h5>Request body <code>application/json</code></h5><p>Title and optional description for a new video.</p><div class="code"><pre><code>{
+  &quot;title&quot;: &quot;Introduction to Faith&quot;,
+  &quot;description&quot;: &quot;An introductory lesson&quot;
+}</code></pre></div><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr></thead><tbody><tr><td><code>title</code></td><td><code>string</code></td><td>Yes</td><td>Video title. <span class="note">1–200 characters.</span></td></tr><tr><td><code>description</code></td><td><code>string | null</code></td><td>No</td><td>Optional video description. <span class="note">At most 5000 characters.</span></td></tr></tbody></table><h5>Response <code>201 Created</code></h5><p>Video draft created.</p><table><thead><tr><th>Header</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td><code>Location</code></td><td><code>string (uri-reference)</code></td><td>Address of the new video.</td></tr></tbody></table><div class="code"><pre><code>{
+  &quot;id&quot;: &quot;550e8400-e29b-41d4-a716-446655440000&quot;,
+  &quot;title&quot;: &quot;Introduction to Faith&quot;,
+  &quot;description&quot;: &quot;An introductory lesson&quot;,
+  &quot;status&quot;: &quot;CREATED&quot;,
+  &quot;publication_status&quot;: &quot;DRAFT&quot;,
+  &quot;size_bytes&quot;: null,
+  &quot;duration_seconds&quot;: null,
+  &quot;thumbnail&quot;: {
+    &quot;status&quot;: &quot;PENDING&quot;,
+    &quot;source&quot;: &quot;NONE&quot;,
+    &quot;url&quot;: null,
+    &quot;sizes&quot;: null
+  },
+  &quot;published_at&quot;: null,
+  &quot;created_at&quot;: &quot;2026-10-13T14:00:00Z&quot;,
+  &quot;updated_at&quot;: &quot;2026-10-13T14:00:00Z&quot;,
+  &quot;latest_job_id&quot;: null
+}</code></pre></div><h5>Errors</h5><table><thead><tr><th>Status</th><th>Description</th></tr></thead><tbody><tr><td><code>400</code></td><td>A deliberate application rejection, such as unsupported media.</td></tr><tr><td><code>401</code></td><td>Authentication is missing or invalid.</td></tr><tr><td><code>403</code></td><td>Access denied.</td></tr><tr><td><code>422</code></td><td>Path, query, or body values failed native request validation.</td></tr><tr><td><code>429</code></td><td>Too many requests. Try again later.</td></tr><tr><td><code>500</code></td><td>An unexpected server failure. Production responses do not include exception details.</td></tr><tr><td><code>503</code></td><td>The service is temporarily unavailable.</td></tr></tbody></table></section><section class="endpoint" id="admin-get-video" data-operation-id="admin.videos.get_video"><h4><a href="#admin-get-video">Get Video</a></h4><p class="route"><span class="method">GET</span> <code>/v1/admin/videos/{id}</code></p><p>Get video details and lifecycle status.</p><p class="auth"><strong>Auth</strong> Bearer token</p><h5>Path parameters</h5><table><thead><tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr></thead><tbody><tr><td><code>id</code></td><td><code>string (uuid)</code></td><td>Yes</td><td>Video ID.</td></tr></tbody></table><h5>Example request</h5><div class="code"><button class="copy" type="button">Copy</button><pre><code>curl &quot;$BASE_URL/v1/admin/videos/550e8400-e29b-41d4-a716-446655440000&quot; \
+  -H &quot;Authorization: Bearer $TOKEN&quot;</code></pre></div><h5>Response <code>200 OK</code></h5><p>Video details.</p><div class="code"><pre><code>{
+  &quot;id&quot;: &quot;550e8400-e29b-41d4-a716-446655440000&quot;,
+  &quot;title&quot;: &quot;Introduction to Faith&quot;,
+  &quot;description&quot;: &quot;An introductory lesson&quot;,
+  &quot;status&quot;: &quot;CREATED&quot;,
+  &quot;publication_status&quot;: &quot;DRAFT&quot;,
+  &quot;size_bytes&quot;: null,
+  &quot;duration_seconds&quot;: null,
+  &quot;thumbnail&quot;: {
+    &quot;status&quot;: &quot;PENDING&quot;,
+    &quot;source&quot;: &quot;NONE&quot;,
+    &quot;url&quot;: null,
+    &quot;sizes&quot;: null
+  },
+  &quot;published_at&quot;: null,
+  &quot;created_at&quot;: &quot;2026-10-13T14:00:00Z&quot;,
+  &quot;updated_at&quot;: &quot;2026-10-13T14:00:00Z&quot;,
+  &quot;latest_job_id&quot;: null
+}</code></pre></div><h5>Errors</h5><table><thead><tr><th>Status</th><th>Description</th></tr></thead><tbody><tr><td><code>400</code></td><td>A deliberate application rejection, such as unsupported media.</td></tr><tr><td><code>401</code></td><td>Authentication is missing or invalid.</td></tr><tr><td><code>403</code></td><td>Access denied.</td></tr><tr><td><code>404</code></td><td>The video was not found or is not available to you.</td></tr><tr><td><code>422</code></td><td>Path, query, or body values failed native request validation.</td></tr><tr><td><code>429</code></td><td>Too many requests. Try again later.</td></tr><tr><td><code>500</code></td><td>An unexpected server failure. Production responses do not include exception details.</td></tr><tr><td><code>503</code></td><td>The service is temporarily unavailable.</td></tr></tbody></table></section><section class="endpoint" id="admin-update-video" data-operation-id="admin.videos.update_video"><h4><a href="#admin-update-video">Update Video</a></h4><p class="route"><span class="method">PATCH</span> <code>/v1/admin/videos/{id}</code></p><p>Edit video details or publish and unpublish a video.</p><p class="auth"><strong>Auth</strong> Bearer token</p><h5>Path parameters</h5><table><thead><tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr></thead><tbody><tr><td><code>id</code></td><td><code>string (uuid)</code></td><td>Yes</td><td>Video ID.</td></tr></tbody></table><h5>Example request</h5><div class="code"><button class="copy" type="button">Copy</button><pre><code>curl -X PATCH &quot;$BASE_URL/v1/admin/videos/550e8400-e29b-41d4-a716-446655440000&quot; \
+  -H &quot;Authorization: Bearer $TOKEN&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -d &#x27;{
+  &quot;title&quot;: &quot;Introduction to Faith&quot;,
+  &quot;description&quot;: &quot;An introductory lesson&quot;,
+  &quot;publication_status&quot;: &quot;DRAFT&quot;
+}&#x27;</code></pre></div><h5>Request body <code>application/json</code></h5><p>Video fields to update.</p><div class="code"><pre><code>{
+  &quot;title&quot;: &quot;Introduction to Faith&quot;,
+  &quot;description&quot;: &quot;An introductory lesson&quot;,
+  &quot;publication_status&quot;: &quot;DRAFT&quot;
+}</code></pre></div><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr></thead><tbody><tr><td><code>title</code></td><td><code>string</code></td><td>No</td><td>Video title. <span class="note">1–200 characters.</span></td></tr><tr><td><code>description</code></td><td><code>string | null</code></td><td>No</td><td>Optional video description. <span class="note">At most 5000 characters.</span></td></tr><tr><td><code>publication_status</code></td><td><code>DRAFT | PUBLISHED</code></td><td>No</td><td>Whether the video is a draft or published.</td></tr></tbody></table><p class="note">Send at least one of <code>title</code>, <code>description</code>, <code>publication_status</code>.</p><h5>Response <code>200 OK</code></h5><p>Video details.</p><div class="code"><pre><code>{
+  &quot;id&quot;: &quot;550e8400-e29b-41d4-a716-446655440000&quot;,
+  &quot;title&quot;: &quot;Introduction to Faith&quot;,
+  &quot;description&quot;: &quot;An introductory lesson&quot;,
+  &quot;status&quot;: &quot;CREATED&quot;,
+  &quot;publication_status&quot;: &quot;DRAFT&quot;,
+  &quot;size_bytes&quot;: null,
+  &quot;duration_seconds&quot;: null,
+  &quot;thumbnail&quot;: {
+    &quot;status&quot;: &quot;PENDING&quot;,
+    &quot;source&quot;: &quot;NONE&quot;,
+    &quot;url&quot;: null,
+    &quot;sizes&quot;: null
+  },
+  &quot;published_at&quot;: null,
+  &quot;created_at&quot;: &quot;2026-10-13T14:00:00Z&quot;,
+  &quot;updated_at&quot;: &quot;2026-10-13T14:00:00Z&quot;,
+  &quot;latest_job_id&quot;: null
+}</code></pre></div><h5>Errors</h5><table><thead><tr><th>Status</th><th>Description</th></tr></thead><tbody><tr><td><code>400</code></td><td>A deliberate application rejection, such as unsupported media.</td></tr><tr><td><code>401</code></td><td>Authentication is missing or invalid.</td></tr><tr><td><code>403</code></td><td>Access denied.</td></tr><tr><td><code>404</code></td><td>The video was not found or is not available to you.</td></tr><tr><td><code>409</code></td><td>The request conflicts with the current video or upload state.</td></tr><tr><td><code>422</code></td><td>Path, query, or body values failed native request validation.</td></tr><tr><td><code>429</code></td><td>Too many requests. Try again later.</td></tr><tr><td><code>500</code></td><td>An unexpected server failure. Production responses do not include exception details.</td></tr><tr><td><code>503</code></td><td>The service is temporarily unavailable.</td></tr></tbody></table></section><section class="endpoint" id="admin-delete-video" data-operation-id="admin.videos.delete_video"><h4><a href="#admin-delete-video">Delete Video</a></h4><p class="route"><span class="method">DELETE</span> <code>/v1/admin/videos/{id}</code></p><p>Delete a video. Later requests for it return 404.</p><p class="auth"><strong>Auth</strong> Bearer token</p><h5>Path parameters</h5><table><thead><tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr></thead><tbody><tr><td><code>id</code></td><td><code>string (uuid)</code></td><td>Yes</td><td>Video ID.</td></tr></tbody></table><h5>Example request</h5><div class="code"><button class="copy" type="button">Copy</button><pre><code>curl -X DELETE &quot;$BASE_URL/v1/admin/videos/550e8400-e29b-41d4-a716-446655440000&quot; \
+  -H &quot;Authorization: Bearer $TOKEN&quot;</code></pre></div><h5>Response <code>204 No Content</code></h5><p>Video deleted.</p><p class="note">No body.</p><h5>Errors</h5><table><thead><tr><th>Status</th><th>Description</th></tr></thead><tbody><tr><td><code>400</code></td><td>A deliberate application rejection, such as unsupported media.</td></tr><tr><td><code>401</code></td><td>Authentication is missing or invalid.</td></tr><tr><td><code>403</code></td><td>Access denied.</td></tr><tr><td><code>404</code></td><td>The video was not found or is not available to you.</td></tr><tr><td><code>422</code></td><td>Path, query, or body values failed native request validation.</td></tr><tr><td><code>429</code></td><td>Too many requests. Try again later.</td></tr><tr><td><code>500</code></td><td>An unexpected server failure. Production responses do not include exception details.</td></tr><tr><td><code>503</code></td><td>The service is temporarily unavailable.</td></tr></tbody></table></section><h3>Uploads</h3><p>Upload video files and confirm completed uploads.</p><section class="endpoint" id="admin-create-video-upload-url" data-operation-id="admin.videos.upload_url"><h4><a href="#admin-create-video-upload-url">Create Video Upload URL</a></h4><p class="route"><span class="method">POST</span> <code>/v1/admin/videos/{id}:upload-url</code></p><p>Get a URL and instructions to upload an MP4 file.</p><p class="auth"><strong>Auth</strong> Bearer token</p><h5>Path parameters</h5><table><thead><tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr></thead><tbody><tr><td><code>id</code></td><td><code>string (uuid)</code></td><td>Yes</td><td>Video ID.</td></tr></tbody></table><h5>Example request</h5><div class="code"><button class="copy" type="button">Copy</button><pre><code>curl -X POST &quot;$BASE_URL/v1/admin/videos/550e8400-e29b-41d4-a716-446655440000:upload-url&quot; \
+  -H &quot;Authorization: Bearer $TOKEN&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -d &#x27;{
+  &quot;file_name&quot;: &quot;introduction.mp4&quot;,
+  &quot;content_type&quot;: &quot;video/mp4&quot;,
+  &quot;size_bytes&quot;: 524288000
+}&#x27;</code></pre></div><h5>Request body <code>application/json</code></h5><p>Details of the MP4 file to upload.</p><div class="code"><pre><code>{
+  &quot;file_name&quot;: &quot;introduction.mp4&quot;,
+  &quot;content_type&quot;: &quot;video/mp4&quot;,
+  &quot;size_bytes&quot;: 524288000
+}</code></pre></div><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr></thead><tbody><tr><td><code>file_name</code></td><td><code>string</code></td><td>Yes</td><td>Name of the video file.</td></tr><tr><td><code>content_type</code></td><td><code>video/mp4</code></td><td>Yes</td><td>Video media type.</td></tr><tr><td><code>size_bytes</code></td><td><code>integer (int64)</code></td><td>Yes</td><td>File size in bytes. <span class="note">Minimum 1.</span></td></tr></tbody></table><h5>Response <code>200 OK</code></h5><p>Upload URL and instructions.</p><div class="code"><pre><code>{
+  &quot;video_id&quot;: &quot;550e8400-e29b-41d4-a716-446655440000&quot;,
+  &quot;status&quot;: &quot;UPLOADING&quot;,
+  &quot;upload&quot;: {
+    &quot;upload_id&quot;: &quot;04d1790f-f941-4ba6-8d97-0e6830ca4394&quot;,
+    &quot;method&quot;: &quot;PUT&quot;,
+    &quot;url&quot;: &quot;https://uploads.example.com/source.mp4?signature=example&quot;,
+    &quot;headers&quot;: {
+      &quot;Content-Type&quot;: &quot;video/mp4&quot;
+    },
+    &quot;expires_at&quot;: &quot;2026-10-13T14:15:00Z&quot;
+  }
+}</code></pre></div><h5>Errors</h5><table><thead><tr><th>Status</th><th>Description</th></tr></thead><tbody><tr><td><code>400</code></td><td>A deliberate application rejection, such as unsupported media.</td></tr><tr><td><code>401</code></td><td>Authentication is missing or invalid.</td></tr><tr><td><code>403</code></td><td>Access denied.</td></tr><tr><td><code>404</code></td><td>The video was not found or is not available to you.</td></tr><tr><td><code>409</code></td><td>The request conflicts with the current video or upload state.</td></tr><tr><td><code>413</code></td><td>The file exceeds the allowed size.</td></tr><tr><td><code>422</code></td><td>Path, query, or body values failed native request validation.</td></tr><tr><td><code>429</code></td><td>Too many requests. Try again later.</td></tr><tr><td><code>500</code></td><td>An unexpected server failure. Production responses do not include exception details.</td></tr><tr><td><code>503</code></td><td>The service is temporarily unavailable.</td></tr></tbody></table></section><section class="endpoint" id="admin-confirm-video-upload" data-operation-id="admin.videos.complete_upload"><h4><a href="#admin-confirm-video-upload">Confirm Video Upload</a></h4><p class="route"><span class="method">POST</span> <code>/v1/admin/videos/{id}:complete-upload</code></p><p>Confirm an upload, start processing, and return the video job.</p><p class="auth"><strong>Auth</strong> Bearer token</p><h5>Path parameters</h5><table><thead><tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr></thead><tbody><tr><td><code>id</code></td><td><code>string (uuid)</code></td><td>Yes</td><td>Video ID.</td></tr></tbody></table><h5>Example request</h5><div class="code"><button class="copy" type="button">Copy</button><pre><code>curl -X POST &quot;$BASE_URL/v1/admin/videos/550e8400-e29b-41d4-a716-446655440000:complete-upload&quot; \
+  -H &quot;Authorization: Bearer $TOKEN&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -d &#x27;{
+  &quot;upload_id&quot;: &quot;04d1790f-f941-4ba6-8d97-0e6830ca4394&quot;
+}&#x27;</code></pre></div><h5>Request body <code>application/json</code></h5><p>The upload ID returned with the upload URL.</p><div class="code"><pre><code>{
+  &quot;upload_id&quot;: &quot;04d1790f-f941-4ba6-8d97-0e6830ca4394&quot;
+}</code></pre></div><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr></thead><tbody><tr><td><code>upload_id</code></td><td><code>string (uuid)</code></td><td>Yes</td><td>Upload ID returned with the upload URL.</td></tr></tbody></table><h5>Response <code>202 Accepted</code></h5><p>Processing job started or already in progress.</p><table><thead><tr><th>Header</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td><code>Location</code></td><td><code>string (uri-reference)</code></td><td>Address of the started job.</td></tr></tbody></table><div class="code"><pre><code>{
+  &quot;id&quot;: &quot;e9f1c6d0-4e8b-4a23-a52a-21a3d51127d0&quot;,
+  &quot;status&quot;: &quot;QUEUED&quot;,
+  &quot;video_id&quot;: &quot;550e8400-e29b-41d4-a716-446655440000&quot;,
+  &quot;message&quot;: null
+}</code></pre></div><h5>Errors</h5><table><thead><tr><th>Status</th><th>Description</th></tr></thead><tbody><tr><td><code>400</code></td><td>A deliberate application rejection, such as unsupported media.</td></tr><tr><td><code>401</code></td><td>Authentication is missing or invalid.</td></tr><tr><td><code>403</code></td><td>Access denied.</td></tr><tr><td><code>404</code></td><td>The video or uploaded file was not found.</td></tr><tr><td><code>409</code></td><td>The request conflicts with the current video or upload state.</td></tr><tr><td><code>413</code></td><td>The file exceeds the allowed size.</td></tr><tr><td><code>422</code></td><td>Path, query, or body values failed native request validation.</td></tr><tr><td><code>429</code></td><td>Too many requests. Try again later.</td></tr><tr><td><code>500</code></td><td>An unexpected server failure. Production responses do not include exception details.</td></tr><tr><td><code>503</code></td><td>The service is temporarily unavailable.</td></tr></tbody></table></section><h3>Thumbnails</h3><p>Upload custom thumbnails or use generated thumbnails.</p><section class="endpoint" id="admin-create-video-thumbnail-upload-url" data-operation-id="admin.thumbnails.upload_url"><h4><a href="#admin-create-video-thumbnail-upload-url">Create Video Thumbnail Upload URL</a></h4><p class="route"><span class="method">POST</span> <code>/v1/admin/videos/{id}/thumbnails:upload-url</code></p><p>Get a URL and instructions to upload a custom thumbnail. The image must be landscape 16:9 and at least 1280 × 720. A new upload URL replaces any upload not yet confirmed.</p><p class="auth"><strong>Auth</strong> Bearer token</p><h5>Path parameters</h5><table><thead><tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr></thead><tbody><tr><td><code>id</code></td><td><code>string (uuid)</code></td><td>Yes</td><td>Video ID.</td></tr></tbody></table><h5>Example request</h5><div class="code"><button class="copy" type="button">Copy</button><pre><code>curl -X POST &quot;$BASE_URL/v1/admin/videos/550e8400-e29b-41d4-a716-446655440000/thumbnails:upload-url&quot; \
+  -H &quot;Authorization: Bearer $TOKEN&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -d &#x27;{
+  &quot;file_name&quot;: &quot;faith-cover.jpg&quot;,
+  &quot;content_type&quot;: &quot;image/jpeg&quot;,
+  &quot;size_bytes&quot;: 183420
+}&#x27;</code></pre></div><h5>Request body <code>application/json</code></h5><p>Details of the thumbnail image to upload.</p><div class="code"><pre><code>{
+  &quot;file_name&quot;: &quot;faith-cover.jpg&quot;,
+  &quot;content_type&quot;: &quot;image/jpeg&quot;,
+  &quot;size_bytes&quot;: 183420
+}</code></pre></div><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr></thead><tbody><tr><td><code>file_name</code></td><td><code>string</code></td><td>Yes</td><td>Name of the image file.</td></tr><tr><td><code>content_type</code></td><td><code>image/jpeg | image/png | image/webp</code></td><td>Yes</td><td>Image media type.</td></tr><tr><td><code>size_bytes</code></td><td><code>integer (int64)</code></td><td>Yes</td><td>File size in bytes. <span class="note">Minimum 1.</span></td></tr></tbody></table><h5>Response <code>200 OK</code></h5><p>Thumbnail upload URL and instructions.</p><div class="code"><pre><code>{
+  &quot;video_id&quot;: &quot;550e8400-e29b-41d4-a716-446655440000&quot;,
+  &quot;upload&quot;: {
+    &quot;upload_id&quot;: &quot;50fd0382-794f-4c9b-9a12-60e92a89e008&quot;,
+    &quot;method&quot;: &quot;PUT&quot;,
+    &quot;url&quot;: &quot;https://uploads.example.com/thumbnail.jpg?signature=example&quot;,
+    &quot;headers&quot;: {
+      &quot;Content-Type&quot;: &quot;image/jpeg&quot;
+    },
+    &quot;expires_at&quot;: &quot;2026-10-13T14:15:00Z&quot;
+  }
+}</code></pre></div><h5>Errors</h5><table><thead><tr><th>Status</th><th>Description</th></tr></thead><tbody><tr><td><code>400</code></td><td>A deliberate application rejection, such as unsupported media.</td></tr><tr><td><code>401</code></td><td>Authentication is missing or invalid.</td></tr><tr><td><code>403</code></td><td>Access denied.</td></tr><tr><td><code>404</code></td><td>The video was not found or is not available to you.</td></tr><tr><td><code>409</code></td><td>The request conflicts with the current video or upload state.</td></tr><tr><td><code>413</code></td><td>The file exceeds the allowed size.</td></tr><tr><td><code>422</code></td><td>Path, query, or body values failed native request validation.</td></tr><tr><td><code>429</code></td><td>Too many requests. Try again later.</td></tr><tr><td><code>500</code></td><td>An unexpected server failure. Production responses do not include exception details.</td></tr><tr><td><code>503</code></td><td>The service is temporarily unavailable.</td></tr></tbody></table></section><section class="endpoint" id="admin-confirm-video-thumbnail-upload" data-operation-id="admin.thumbnails.complete_upload"><h4><a href="#admin-confirm-video-thumbnail-upload">Confirm Video Thumbnail Upload</a></h4><p class="route"><span class="method">POST</span> <code>/v1/admin/videos/{id}/thumbnails:complete-upload</code></p><p>Confirm an upload and start rendering it at every thumbnail size; return the job. The current thumbnail stays until the job succeeds. A failed job explains why the image was rejected.</p><p class="auth"><strong>Auth</strong> Bearer token</p><h5>Path parameters</h5><table><thead><tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr></thead><tbody><tr><td><code>id</code></td><td><code>string (uuid)</code></td><td>Yes</td><td>Video ID.</td></tr></tbody></table><h5>Example request</h5><div class="code"><button class="copy" type="button">Copy</button><pre><code>curl -X POST &quot;$BASE_URL/v1/admin/videos/550e8400-e29b-41d4-a716-446655440000/thumbnails:complete-upload&quot; \
+  -H &quot;Authorization: Bearer $TOKEN&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -d &#x27;{
+  &quot;upload_id&quot;: &quot;04d1790f-f941-4ba6-8d97-0e6830ca4394&quot;
+}&#x27;</code></pre></div><h5>Request body <code>application/json</code></h5><p>The upload ID returned with the upload URL.</p><div class="code"><pre><code>{
+  &quot;upload_id&quot;: &quot;04d1790f-f941-4ba6-8d97-0e6830ca4394&quot;
+}</code></pre></div><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr></thead><tbody><tr><td><code>upload_id</code></td><td><code>string (uuid)</code></td><td>Yes</td><td>Upload ID returned with the upload URL.</td></tr></tbody></table><h5>Response <code>202 Accepted</code></h5><p>Processing job started or already in progress.</p><table><thead><tr><th>Header</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td><code>Location</code></td><td><code>string (uri-reference)</code></td><td>Address of the started job.</td></tr></tbody></table><div class="code"><pre><code>{
+  &quot;id&quot;: &quot;e9f1c6d0-4e8b-4a23-a52a-21a3d51127d0&quot;,
+  &quot;status&quot;: &quot;QUEUED&quot;,
+  &quot;video_id&quot;: &quot;550e8400-e29b-41d4-a716-446655440000&quot;,
+  &quot;message&quot;: null
+}</code></pre></div><h5>Errors</h5><table><thead><tr><th>Status</th><th>Description</th></tr></thead><tbody><tr><td><code>400</code></td><td>A deliberate application rejection, such as unsupported media.</td></tr><tr><td><code>401</code></td><td>Authentication is missing or invalid.</td></tr><tr><td><code>403</code></td><td>Access denied.</td></tr><tr><td><code>404</code></td><td>The video or uploaded thumbnail was not found.</td></tr><tr><td><code>409</code></td><td>The request conflicts with the current video or upload state.</td></tr><tr><td><code>413</code></td><td>The file exceeds the allowed size.</td></tr><tr><td><code>422</code></td><td>Path, query, or body values failed native request validation.</td></tr><tr><td><code>429</code></td><td>Too many requests. Try again later.</td></tr><tr><td><code>500</code></td><td>An unexpected server failure. Production responses do not include exception details.</td></tr><tr><td><code>503</code></td><td>The service is temporarily unavailable.</td></tr></tbody></table></section><section class="endpoint" id="admin-delete-video-thumbnail" data-operation-id="admin.thumbnails.delete_thumbnail"><h4><a href="#admin-delete-video-thumbnail">Delete Video Thumbnail</a></h4><p class="route"><span class="method">DELETE</span> <code>/v1/admin/videos/{id}/thumbnails</code></p><p>Remove the custom thumbnail, and any upload not yet processed, and use the generated image.</p><p class="auth"><strong>Auth</strong> Bearer token</p><h5>Path parameters</h5><table><thead><tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr></thead><tbody><tr><td><code>id</code></td><td><code>string (uuid)</code></td><td>Yes</td><td>Video ID.</td></tr></tbody></table><h5>Example request</h5><div class="code"><button class="copy" type="button">Copy</button><pre><code>curl -X DELETE &quot;$BASE_URL/v1/admin/videos/550e8400-e29b-41d4-a716-446655440000/thumbnails&quot; \
+  -H &quot;Authorization: Bearer $TOKEN&quot;</code></pre></div><h5>Response <code>200 OK</code></h5><p>The generated thumbnail or its current status.</p><div class="code"><pre><code>{
+  &quot;video_id&quot;: &quot;550e8400-e29b-41d4-a716-446655440000&quot;,
+  &quot;thumbnail&quot;: {
+    &quot;status&quot;: &quot;READY&quot;,
+    &quot;source&quot;: &quot;CUSTOM&quot;,
+    &quot;url&quot;: &quot;https://media.example.com/videos/550e8400-e29b-41d4-a716-446655440000/thumbnails/50fd0382-794f-4c9b-9a12-60e92a89e008/xl.jpg&quot;,
+    &quot;sizes&quot;: {
+      &quot;xs&quot;: {
+        &quot;width&quot;: 160,
+        &quot;height&quot;: 90,
+        &quot;url&quot;: &quot;https://media.example.com/videos/550e8400-e29b-41d4-a716-446655440000/thumbnails/50fd0382-794f-4c9b-9a12-60e92a89e008/xs.jpg&quot;
+      },
+      &quot;sm&quot;: {
+        &quot;width&quot;: 320,
+        &quot;height&quot;: 180,
+        &quot;url&quot;: &quot;https://media.example.com/videos/550e8400-e29b-41d4-a716-446655440000/thumbnails/50fd0382-794f-4c9b-9a12-60e92a89e008/sm.jpg&quot;
+      },
+      &quot;md&quot;: {
+        &quot;width&quot;: 640,
+        &quot;height&quot;: 360,
+        &quot;url&quot;: &quot;https://media.example.com/videos/550e8400-e29b-41d4-a716-446655440000/thumbnails/50fd0382-794f-4c9b-9a12-60e92a89e008/md.jpg&quot;
+      },
+      &quot;lg&quot;: {
+        &quot;width&quot;: 960,
+        &quot;height&quot;: 540,
+        &quot;url&quot;: &quot;https://media.example.com/videos/550e8400-e29b-41d4-a716-446655440000/thumbnails/50fd0382-794f-4c9b-9a12-60e92a89e008/lg.jpg&quot;
+      },
+      &quot;xl&quot;: {
+        &quot;width&quot;: 1280,
+        &quot;height&quot;: 720,
+        &quot;url&quot;: &quot;https://media.example.com/videos/550e8400-e29b-41d4-a716-446655440000/thumbnails/50fd0382-794f-4c9b-9a12-60e92a89e008/xl.jpg&quot;
+      }
+    }
+  }
+}</code></pre></div><h5>Errors</h5><table><thead><tr><th>Status</th><th>Description</th></tr></thead><tbody><tr><td><code>400</code></td><td>A deliberate application rejection, such as unsupported media.</td></tr><tr><td><code>401</code></td><td>Authentication is missing or invalid.</td></tr><tr><td><code>403</code></td><td>Access denied.</td></tr><tr><td><code>404</code></td><td>The video was not found or is not available to you.</td></tr><tr><td><code>409</code></td><td>The request conflicts with the current video or upload state.</td></tr><tr><td><code>422</code></td><td>Path, query, or body values failed native request validation.</td></tr><tr><td><code>429</code></td><td>Too many requests. Try again later.</td></tr><tr><td><code>500</code></td><td>An unexpected server failure. Production responses do not include exception details.</td></tr><tr><td><code>503</code></td><td>The service is temporarily unavailable.</td></tr></tbody></table></section></main></div><script>
+document.querySelectorAll(".copy").forEach(function (button) {
+  button.addEventListener("click", function () {
+    var text = button.parentElement.querySelector("code").textContent;
+    navigator.clipboard.writeText(text).then(function () {
+      button.textContent = "Copied";
+      setTimeout(function () { button.textContent = "Copy"; }, 1500);
+    });
+  });
+});
+</script></body></html>

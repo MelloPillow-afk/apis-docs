@@ -1,0 +1,79 @@
+x-python-module: videos
+x-python-name: AdminVideo
+type: object
+required:
+  - id
+  - title
+  - description
+  - status
+  - publication_status
+  - size_bytes
+  - duration_seconds
+  - thumbnail
+  - published_at
+  - created_at
+  - updated_at
+  - latest_job_id
+description: Video details for admins.
+properties:
+  id:
+    type: string
+    format: uuid
+  title:
+    $ref: ./title.yaml
+  description:
+    $ref: ./description.yaml
+  status:
+    $ref: ./status.yaml
+  publication_status:
+    $ref: ./publication_status.yaml
+  size_bytes:
+    type:
+      - integer
+      - 'null'
+    format: int64
+    minimum: 1
+    description: Uploaded file size in bytes.
+  duration_seconds:
+    type:
+      - number
+      - 'null'
+    minimum: 0
+    description: Video length in seconds.
+  thumbnail:
+    $ref: ../thumbnails/thumbnail_image.yaml
+  published_at:
+    type:
+      - string
+      - 'null'
+    format: date-time
+    description: When the video was published.
+  created_at:
+    $ref: ../shared/timestamp.yaml
+  updated_at:
+    $ref: ../shared/timestamp.yaml
+  latest_job_id:
+    type:
+      - string
+      - 'null'
+    format: uuid
+    description: >-
+      ID of the most recent processing job, or null before any upload is
+      confirmed.
+examples:
+  - id: 550e8400-e29b-41d4-a716-446655440000
+    title: Introduction to Faith
+    description: An introductory lesson
+    status: CREATED
+    publication_status: DRAFT
+    size_bytes: null
+    duration_seconds: null
+    thumbnail:
+      status: PENDING
+      source: NONE
+      url: null
+      sizes: null
+    published_at: null
+    created_at: '2026-10-13T14:00:00Z'
+    updated_at: '2026-10-13T14:00:00Z'
+    latest_job_id: null

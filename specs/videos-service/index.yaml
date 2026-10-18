@@ -1,0 +1,199 @@
+openapi: 3.2.0
+info:
+  title: Pilgrims Videos Service API
+  version: 1.0.0
+  description: |
+    Manage videos, upload media, track processing jobs, publish videos, and
+    find playback links.
+    Admin endpoints live under /admin; any authenticated caller has admin
+    access for the MVP. Viewers see ready, published videos.
+    Job status is public at /jobs/{job_id}, so clients can poll processing
+    progress after completing an upload.
+    Viewer access may require authentication, depending on the service settings.
+    JSON fields use snake_case. IDs are UUIDs and timestamps use UTC.
+    Unavailable values are null. Previously shared playback links may remain
+    accessible for a time after a video is unpublished or deleted.
+servers:
+  - url: /v1
+    description: Version 1 of the API.
+security:
+  - bearer_auth: []
+tags:
+  - name: Health
+    description: Check API availability.
+  - name: Videos
+    description: Create, update, publish, and delete videos.
+  - name: Uploads
+    description: Upload video files and confirm completed uploads.
+  - name: Playback
+    description: Get video playback links.
+  - name: Thumbnails
+    description: Upload custom thumbnails or use generated thumbnails.
+  - name: Jobs
+    description: Check background processing jobs.
+x-unresolved-decisions:
+  - Whether viewer reads require authentication.
+  - Maximum source upload bytes, effective size enforcement, and confirmed-source finalization.
+  - On-demand image resizing through an image proxy instead of fixed rendered thumbnail sizes.
+  - State retention following a rejected source confirmation.
+paths:
+  /ping:
+    $ref: paths/health.yaml#/~1ping
+  /videos:
+    $ref: paths/videos.yaml#/~1videos
+  /videos/{id}/playback:
+    $ref: paths/videos.yaml#/~1videos~1{id}~1playback
+  /admin/videos:
+    $ref: paths/admin/videos.yaml#/~1admin~1videos
+  /admin/videos/{id}:
+    $ref: paths/admin/videos.yaml#/~1admin~1videos~1{id}
+  /admin/videos/{id}:upload-url:
+    $ref: paths/admin/videos.yaml#/~1admin~1videos~1{id}:upload-url
+  /admin/videos/{id}:complete-upload:
+    $ref: paths/admin/videos.yaml#/~1admin~1videos~1{id}:complete-upload
+  /admin/videos/{id}/thumbnails:upload-url:
+    $ref: paths/admin/thumbnails.yaml#/~1admin~1videos~1{id}~1thumbnails:upload-url
+  /admin/videos/{id}/thumbnails:complete-upload:
+    $ref: paths/admin/thumbnails.yaml#/~1admin~1videos~1{id}~1thumbnails:complete-upload
+  /admin/videos/{id}/thumbnails:
+    $ref: paths/admin/thumbnails.yaml#/~1admin~1videos~1{id}~1thumbnails
+  /jobs/{job_id}:
+    $ref: paths/jobs.yaml#/~1jobs~1{job_id}
+components:
+  securitySchemes:
+    bearer_auth:
+      type: http
+      scheme: bearer
+      description: Bearer token for authentication.
+  parameters:
+    id:
+      $ref: parameters/id.yaml
+    job_id:
+      $ref: parameters/job_id.yaml
+    limit:
+      $ref: parameters/limit.yaml
+    page_token:
+      $ref: parameters/page_token.yaml
+    publication_status:
+      $ref: parameters/publication_status.yaml
+  headers:
+    response_location:
+      $ref: parameters/response_location.yaml
+    job_location:
+      $ref: parameters/job_location.yaml
+  requestBodies:
+    upload_completion:
+      required: true
+      description: The upload ID returned with the upload URL.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/upload_complete'
+          examples:
+            source_attempt:
+              value:
+                upload_id: 04d1790f-f941-4ba6-8d97-0e6830ca4394
+            thumbnail_attempt:
+              value:
+                upload_id: 50fd0382-794f-4c9b-9a12-60e92a89e008
+  schemas:
+    ping:
+      $ref: schemas/health/ping.yaml
+    status:
+      $ref: schemas/videos/status.yaml
+    publication_status:
+      $ref: schemas/videos/publication_status.yaml
+    thumbnail_status:
+      $ref: schemas/thumbnails/thumbnail_status.yaml
+    thumbnail_source:
+      $ref: schemas/thumbnails/thumbnail_source.yaml
+    title:
+      $ref: schemas/videos/title.yaml
+    description:
+      $ref: schemas/videos/description.yaml
+    timestamp:
+      $ref: schemas/shared/timestamp.yaml
+    delivery_url:
+      $ref: schemas/shared/delivery_url.yaml
+    thumbnail_image:
+      $ref: schemas/thumbnails/thumbnail_image.yaml
+    thumbnail_sizes:
+      $ref: schemas/thumbnails/thumbnail_sizes.yaml
+    thumbnail_size:
+      $ref: schemas/thumbnails/thumbnail_size.yaml
+    admin_video:
+      $ref: schemas/videos/admin_video.yaml
+    admin_video_create:
+      $ref: schemas/videos/admin_video_create.yaml
+    admin_video_update:
+      $ref: schemas/videos/admin_video_update.yaml
+    video:
+      $ref: schemas/videos/video.yaml
+    source_upload_create:
+      $ref: schemas/uploads/source_upload_create.yaml
+    thumbnail_upload_create:
+      $ref: schemas/thumbnails/thumbnail_upload_create.yaml
+    upload_complete:
+      $ref: schemas/uploads/upload_complete.yaml
+    upload:
+      $ref: schemas/uploads/upload.yaml
+    source_upload:
+      $ref: schemas/uploads/source_upload.yaml
+    thumbnail_upload:
+      $ref: schemas/thumbnails/thumbnail_upload.yaml
+    job:
+      $ref: schemas/jobs/job.yaml
+    job_status:
+      $ref: schemas/jobs/job_status.yaml
+    playback:
+      $ref: schemas/playback/playback.yaml
+    thumbnail:
+      $ref: schemas/thumbnails/thumbnail.yaml
+    admin_videos:
+      $ref: schemas/videos/admin_videos.yaml
+    videos:
+      $ref: schemas/videos/videos.yaml
+    pagination:
+      $ref: schemas/shared/pagination.yaml
+    error:
+      x-python-module: errors
+      x-python-name: Error
+      type: object
+      required:
+        - detail
+      description: A deliberate HTTP error raised by the application.
+      properties:
+        detail:
+          type: string
+          description: Readable explanation of the error.
+      examples:
+        - detail: The video was not found.
+  responses:
+    video_resource:
+      $ref: responses/video_resource.yaml
+    validation_error:
+      $ref: responses/validation_error.yaml
+    bad_request:
+      $ref: responses/bad_request.yaml
+    invalid_page_token:
+      $ref: responses/invalid_page_token.yaml
+    unauthorized:
+      $ref: responses/unauthorized.yaml
+    forbidden:
+      $ref: responses/forbidden.yaml
+    video_not_found:
+      $ref: responses/video_not_found.yaml
+    job_not_found:
+      $ref: responses/job_not_found.yaml
+    job_accepted:
+      $ref: responses/job_accepted.yaml
+    conflict:
+      $ref: responses/conflict.yaml
+    file_too_large:
+      $ref: responses/file_too_large.yaml
+    too_many_requests:
+      $ref: responses/too_many_requests.yaml
+    internal_error:
+      $ref: responses/internal_error.yaml
+    unavailable:
+      $ref: responses/unavailable.yaml

@@ -1,0 +1,35 @@
+x-python-module: videos
+x-python-name: AdminVideos
+type: object
+required:
+  - data
+  - pagination
+properties:
+  data:
+    type: array
+    items:
+      $ref: ./admin_video.yaml
+  pagination:
+    $ref: ../shared/pagination.yaml
+description: A page of videos for admins, newest created first.
+examples:
+  - data:
+      - id: 550e8400-e29b-41d4-a716-446655440000
+        title: Introduction to Faith
+        description: An introductory lesson
+        status: CREATED
+        publication_status: DRAFT
+        size_bytes: null
+        duration_seconds: null
+        thumbnail:
+          status: PENDING
+          source: NONE
+          url: null
+          sizes: null
+        published_at: null
+        created_at: '2026-10-13T14:00:00Z'
+        updated_at: '2026-10-13T14:00:00Z'
+        latest_job_id: null
+    pagination:
+      next_page_token: null
+      has_more: false

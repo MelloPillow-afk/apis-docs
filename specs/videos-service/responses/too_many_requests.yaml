@@ -1,0 +1,5 @@
+description: Too many requests. Try again later.
+content:
+  application/json:
+    schema:
+      $ref: ../index.yaml#/components/schemas/error

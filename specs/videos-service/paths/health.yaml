@@ -1,0 +1,19 @@
+/ping:
+  servers:
+    - url: /
+  get:
+    tags:
+      - Health
+    operationId: health.ping
+    summary: Get Health
+    description: Check API reachability. Does not check the database.
+    security: []
+    responses:
+      '200':
+        description: The API is responding.
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/health/ping.yaml
+      '500':
+        $ref: ../responses/internal_error.yaml

@@ -1,0 +1,9 @@
+name: job_id
+in: path
+required: true
+description: Job ID.
+schema:
+  type: string
+  format: uuid
+  examples:
+    - e9f1c6d0-4e8b-4a23-a52a-21a3d51127d0

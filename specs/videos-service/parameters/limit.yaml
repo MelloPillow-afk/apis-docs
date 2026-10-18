@@ -1,0 +1,10 @@
+name: limit
+in: query
+description: Maximum number of videos to return.
+schema:
+  type: integer
+  minimum: 1
+  maximum: 100
+  default: 20
+  examples:
+    - 20

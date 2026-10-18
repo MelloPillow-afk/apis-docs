@@ -1,0 +1,7 @@
+name: page_token
+in: query
+description: The next_page_token from the previous page.
+schema:
+  type: string
+  examples:
+    - eyJ0IjoiMjAyNi0xMC0xNFQwOTowMDowMC4wMDAwMDArMDA6MDAiLCJpZCI6IjNmMmI4YzFlLTdkNGEtNGU2Yi05YzBmLTVhMWQyZTNiNGM1ZCJ9

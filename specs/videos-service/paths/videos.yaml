@@ -1,0 +1,74 @@
+/videos:
+  get:
+    tags:
+      - Videos
+    operationId: videos.list_videos
+    summary: Get Videos Collection
+    description: >-
+      Browse ready, published videos, newest published first. Pass
+      next_page_token as page_token to get the next page.
+    security:
+      - bearer_auth: []
+      - {}
+    parameters:
+      - $ref: ../parameters/limit.yaml
+      - $ref: ../parameters/page_token.yaml
+    responses:
+      '200':
+        description: A page of videos.
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/videos/videos.yaml
+      '400':
+        $ref: ../responses/invalid_page_token.yaml
+      '401':
+        $ref: ../responses/unauthorized.yaml
+      '403':
+        $ref: ../responses/forbidden.yaml
+      '422':
+        $ref: ../responses/validation_error.yaml
+      '429':
+        $ref: ../responses/too_many_requests.yaml
+      '500':
+        $ref: ../responses/internal_error.yaml
+      '503':
+        $ref: ../responses/unavailable.yaml
+
+/videos/{id}/playback:
+  parameters:
+    - $ref: ../parameters/id.yaml
+  get:
+    tags:
+      - Playback
+    operationId: playback.get_playback
+    summary: Get Video Playback
+    description: Get the HLS playback link for a video.
+    security:
+      - bearer_auth: []
+      - {}
+    responses:
+      '200':
+        description: Video playback link.
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/playback/playback.yaml
+      '400':
+        $ref: ../responses/bad_request.yaml
+      '401':
+        $ref: ../responses/unauthorized.yaml
+      '403':
+        $ref: ../responses/forbidden.yaml
+      '404':
+        $ref: ../responses/video_not_found.yaml
+      '409':
+        $ref: ../responses/conflict.yaml
+      '422':
+        $ref: ../responses/validation_error.yaml
+      '429':
+        $ref: ../responses/too_many_requests.yaml
+      '500':
+        $ref: ../responses/internal_error.yaml
+      '503':
+        $ref: ../responses/unavailable.yaml

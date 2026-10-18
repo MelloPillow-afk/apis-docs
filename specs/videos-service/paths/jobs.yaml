@@ -1,0 +1,31 @@
+/jobs/{job_id}:
+  parameters:
+    - $ref: ../parameters/job_id.yaml
+  get:
+    tags:
+      - Jobs
+    operationId: jobs.get_job
+    summary: Get Job
+    description: |
+      Get the status of a background processing job. Clients poll this after
+      completing an upload. Anyone with the job ID can read it.
+    security: []
+    responses:
+      '200':
+        description: Job details.
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/jobs/job.yaml
+      '400':
+        $ref: ../responses/bad_request.yaml
+      '404':
+        $ref: ../responses/job_not_found.yaml
+      '422':
+        $ref: ../responses/validation_error.yaml
+      '429':
+        $ref: ../responses/too_many_requests.yaml
+      '500':
+        $ref: ../responses/internal_error.yaml
+      '503':
+        $ref: ../responses/unavailable.yaml

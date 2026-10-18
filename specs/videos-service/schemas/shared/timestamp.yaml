@@ -1,0 +1,7 @@
+x-python-module: shared
+x-python-name: Timestamp
+type: string
+format: date-time
+description: Date and time in UTC.
+examples:
+  - '2026-10-13T14:00:00Z'

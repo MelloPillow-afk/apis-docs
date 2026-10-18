@@ -1,0 +1,11 @@
+x-python-module: health
+x-python-name: Ping
+type: object
+required:
+  - status
+properties:
+  status:
+    type: string
+    const: ok
+examples:
+  - status: ok

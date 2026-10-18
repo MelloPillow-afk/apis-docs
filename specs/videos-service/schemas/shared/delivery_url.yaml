@@ -1,0 +1,8 @@
+x-python-module: shared
+x-python-name: DeliveryUrl
+type: string
+format: uri
+pattern: ^https://
+description: HTTPS link to the media.
+examples:
+  - https://media.example.com/videos/intro/hls/master.m3u8

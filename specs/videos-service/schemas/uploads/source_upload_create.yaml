@@ -1,0 +1,26 @@
+x-python-module: uploads
+x-python-name: SourceUploadCreate
+type: object
+required:
+  - file_name
+  - content_type
+  - size_bytes
+properties:
+  file_name:
+    type: string
+    minLength: 1
+    description: Name of the video file.
+  content_type:
+    type: string
+    const: video/mp4
+    description: Video media type.
+  size_bytes:
+    type: integer
+    format: int64
+    minimum: 1
+    description: File size in bytes.
+description: Details of the MP4 file to upload.
+examples:
+  - file_name: introduction.mp4
+    content_type: video/mp4
+    size_bytes: 524288000

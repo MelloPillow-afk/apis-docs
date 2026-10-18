@@ -1,0 +1,11 @@
+x-python-module: jobs
+x-python-name: JobStatus
+type: string
+enum:
+  - QUEUED
+  - RUNNING
+  - SUCCEEDED
+  - FAILED
+description: Whether the job is queued, running, succeeded, or failed.
+examples:
+  - QUEUED

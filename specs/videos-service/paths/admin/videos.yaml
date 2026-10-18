@@ -1,0 +1,240 @@
+/admin/videos:
+  get:
+    tags:
+      - Videos
+    operationId: admin.videos.list_videos
+    summary: List Videos
+    description: >-
+      List videos in every lifecycle status, newest created first. Pass
+      next_page_token as page_token, with the same filters, to get the next
+      page.
+    parameters:
+      - $ref: ../../parameters/limit.yaml
+      - $ref: ../../parameters/page_token.yaml
+      - $ref: ../../parameters/publication_status.yaml
+    responses:
+      '200':
+        description: A page of videos.
+        content:
+          application/json:
+            schema:
+              $ref: ../../schemas/videos/admin_videos.yaml
+      '400':
+        $ref: ../../responses/invalid_page_token.yaml
+      '401':
+        $ref: ../../responses/unauthorized.yaml
+      '403':
+        $ref: ../../responses/forbidden.yaml
+      '422':
+        $ref: ../../responses/validation_error.yaml
+      '429':
+        $ref: ../../responses/too_many_requests.yaml
+      '500':
+        $ref: ../../responses/internal_error.yaml
+      '503':
+        $ref: ../../responses/unavailable.yaml
+  post:
+    tags:
+      - Videos
+    operationId: admin.videos.create_video
+    summary: Create Video
+    description: Create a draft with a title and optional description.
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../../schemas/videos/admin_video_create.yaml
+    responses:
+      '201':
+        description: Video draft created.
+        headers:
+          Location:
+            $ref: ../../parameters/response_location.yaml
+        content:
+          application/json:
+            schema:
+              $ref: ../../schemas/videos/admin_video.yaml
+      '400':
+        $ref: ../../responses/bad_request.yaml
+      '401':
+        $ref: ../../responses/unauthorized.yaml
+      '403':
+        $ref: ../../responses/forbidden.yaml
+      '422':
+        $ref: ../../responses/validation_error.yaml
+      '429':
+        $ref: ../../responses/too_many_requests.yaml
+      '500':
+        $ref: ../../responses/internal_error.yaml
+      '503':
+        $ref: ../../responses/unavailable.yaml
+
+/admin/videos/{id}:
+  parameters:
+    - $ref: ../../parameters/id.yaml
+  get:
+    tags:
+      - Videos
+    operationId: admin.videos.get_video
+    summary: Get Video
+    description: Get video details and lifecycle status.
+    responses:
+      '200':
+        $ref: ../../responses/video_resource.yaml
+      '400':
+        $ref: ../../responses/bad_request.yaml
+      '401':
+        $ref: ../../responses/unauthorized.yaml
+      '403':
+        $ref: ../../responses/forbidden.yaml
+      '404':
+        $ref: ../../responses/video_not_found.yaml
+      '422':
+        $ref: ../../responses/validation_error.yaml
+      '429':
+        $ref: ../../responses/too_many_requests.yaml
+      '500':
+        $ref: ../../responses/internal_error.yaml
+      '503':
+        $ref: ../../responses/unavailable.yaml
+  patch:
+    tags:
+      - Videos
+    operationId: admin.videos.update_video
+    summary: Update Video
+    description: Edit video details or publish and unpublish a video.
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../../schemas/videos/admin_video_update.yaml
+    responses:
+      '200':
+        $ref: ../../responses/video_resource.yaml
+      '400':
+        $ref: ../../responses/bad_request.yaml
+      '401':
+        $ref: ../../responses/unauthorized.yaml
+      '403':
+        $ref: ../../responses/forbidden.yaml
+      '404':
+        $ref: ../../responses/video_not_found.yaml
+      '409':
+        $ref: ../../responses/conflict.yaml
+      '422':
+        $ref: ../../responses/validation_error.yaml
+      '429':
+        $ref: ../../responses/too_many_requests.yaml
+      '500':
+        $ref: ../../responses/internal_error.yaml
+      '503':
+        $ref: ../../responses/unavailable.yaml
+  delete:
+    tags:
+      - Videos
+    operationId: admin.videos.delete_video
+    summary: Delete Video
+    description: Delete a video. Later requests for it return 404.
+    responses:
+      '204':
+        description: Video deleted.
+      '400':
+        $ref: ../../responses/bad_request.yaml
+      '401':
+        $ref: ../../responses/unauthorized.yaml
+      '403':
+        $ref: ../../responses/forbidden.yaml
+      '404':
+        $ref: ../../responses/video_not_found.yaml
+      '422':
+        $ref: ../../responses/validation_error.yaml
+      '429':
+        $ref: ../../responses/too_many_requests.yaml
+      '500':
+        $ref: ../../responses/internal_error.yaml
+      '503':
+        $ref: ../../responses/unavailable.yaml
+
+/admin/videos/{id}:upload-url:
+  parameters:
+    - $ref: ../../parameters/id.yaml
+  post:
+    tags:
+      - Uploads
+    operationId: admin.videos.upload_url
+    summary: Create Video Upload URL
+    description: Get a URL and instructions to upload an MP4 file.
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../../schemas/uploads/source_upload_create.yaml
+    responses:
+      '200':
+        description: Upload URL and instructions.
+        content:
+          application/json:
+            schema:
+              $ref: ../../schemas/uploads/source_upload.yaml
+      '400':
+        $ref: ../../responses/bad_request.yaml
+      '401':
+        $ref: ../../responses/unauthorized.yaml
+      '403':
+        $ref: ../../responses/forbidden.yaml
+      '404':
+        $ref: ../../responses/video_not_found.yaml
+      '409':
+        $ref: ../../responses/conflict.yaml
+      '413':
+        $ref: ../../responses/file_too_large.yaml
+      '422':
+        $ref: ../../responses/validation_error.yaml
+      '429':
+        $ref: ../../responses/too_many_requests.yaml
+      '500':
+        $ref: ../../responses/internal_error.yaml
+      '503':
+        $ref: ../../responses/unavailable.yaml
+
+/admin/videos/{id}:complete-upload:
+  parameters:
+    - $ref: ../../parameters/id.yaml
+  post:
+    tags:
+      - Uploads
+    operationId: admin.videos.complete_upload
+    summary: Confirm Video Upload
+    description: Confirm an upload, start processing, and return the video job.
+    requestBody:
+      $ref: ../../index.yaml#/components/requestBodies/upload_completion
+    responses:
+      '202':
+        $ref: ../../responses/job_accepted.yaml
+      '400':
+        $ref: ../../responses/bad_request.yaml
+      '401':
+        $ref: ../../responses/unauthorized.yaml
+      '403':
+        $ref: ../../responses/forbidden.yaml
+      '404':
+        description: The video or uploaded file was not found.
+        content:
+          application/json:
+            schema:
+              $ref: ../../index.yaml#/components/schemas/error
+      '409':
+        $ref: ../../responses/conflict.yaml
+      '413':
+        $ref: ../../responses/file_too_large.yaml
+      '422':
+        $ref: ../../responses/validation_error.yaml
+      '429':
+        $ref: ../../responses/too_many_requests.yaml
+      '500':
+        $ref: ../../responses/internal_error.yaml
+      '503':
+        $ref: ../../responses/unavailable.yaml

@@ -29,3 +29,9 @@ The service needs the secret `APIS_DOCS_TOKEN`: a fine-grained token for this re
 with Contents and Pull requests read/write.
 
 To add a service, copy `videos-service`'s workflow and change the service name.
+
+## Hosting
+
+GitHub Pages serves `site/` publicly at https://mellopillow-afk.github.io/apis-docs/.
+`.github/workflows/pages.yml` publishes it on every push to `main`, so merging a sync PR
+updates the live docs.

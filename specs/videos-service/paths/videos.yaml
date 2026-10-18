@@ -35,6 +35,44 @@
       '503':
         $ref: ../responses/unavailable.yaml
 
+/videos/{id}:
+  parameters:
+    - $ref: ../parameters/id.yaml
+  get:
+    tags:
+      - Videos
+    operationId: videos.get_video
+    summary: Get Video
+    description: >-
+      Get a ready, published video. Videos that are unpublished, still
+      processing, or deleted return 404.
+    security:
+      - bearer_auth: []
+      - {}
+    responses:
+      '200':
+        description: Video details.
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/videos/video.yaml
+      '400':
+        $ref: ../responses/bad_request.yaml
+      '401':
+        $ref: ../responses/unauthorized.yaml
+      '403':
+        $ref: ../responses/forbidden.yaml
+      '404':
+        $ref: ../responses/video_not_found.yaml
+      '422':
+        $ref: ../responses/validation_error.yaml
+      '429':
+        $ref: ../responses/too_many_requests.yaml
+      '500':
+        $ref: ../responses/internal_error.yaml
+      '503':
+        $ref: ../responses/unavailable.yaml
+
 /videos/{id}/playback:
   parameters:
     - $ref: ../parameters/id.yaml

@@ -43,6 +43,8 @@ paths:
     $ref: paths/health.yaml#/~1ping
   /videos:
     $ref: paths/videos.yaml#/~1videos
+  /videos/{id}:
+    $ref: paths/videos.yaml#/~1videos~1{id}
   /videos/{id}/playback:
     $ref: paths/videos.yaml#/~1videos~1{id}~1playback
   /admin/videos:
@@ -53,6 +55,8 @@ paths:
     $ref: paths/admin/videos.yaml#/~1admin~1videos~1{id}:upload-url
   /admin/videos/{id}:complete-upload:
     $ref: paths/admin/videos.yaml#/~1admin~1videos~1{id}:complete-upload
+  /admin/videos/{id}/playback:
+    $ref: paths/admin/videos.yaml#/~1admin~1videos~1{id}~1playback
   /admin/videos/{id}/thumbnails:upload-url:
     $ref: paths/admin/thumbnails.yaml#/~1admin~1videos~1{id}~1thumbnails:upload-url
   /admin/videos/{id}/thumbnails:complete-upload:
